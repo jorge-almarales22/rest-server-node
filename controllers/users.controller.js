@@ -1,4 +1,7 @@
 import { response, request } from "express";
+import User from "../models/user.js";
+import bcryptjs from 'bcryptjs'
+
 
 export const usersGet = (req = request, res = response) => {
 
@@ -11,13 +14,20 @@ export const usersGet = (req = request, res = response) => {
     })
 }
 
-export const userPost = (req, res = response) => {
+export const userPost = async(req, res = response) => {
 
-    const {name, edad} = req.body;
+    const {name, email, password, role} = req.body
+
+    const user = new User({name, email, password, role});
+    
+    //Encriptar la contrasena
+    const salt = bcryptjs.genSaltSync()
+    user.password = bcryptjs.hashSync(password, salt)
+
+    await user.save()
     res.json({
         msg: "Response from controller POST",
-        name,
-        edad
+        user
     })
 }
 
