@@ -12,6 +12,6 @@ export const dbConnection = async() => {
         console.log("Corriendo DB.")
     } catch (error) {
         console.log(error)
-        throw new Error("Error iniciando la DB")
+        // throw new Error("Error iniciando la DB")
     }
 }

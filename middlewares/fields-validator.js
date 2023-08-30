@@ -1,4 +1,6 @@
 import { body, validationResult } from "express-validator";
+import { isRoleValid, validateEmailExist } from "../helpers/db-validator.js";
+
 
 export const fieldsValidator = (req, res, next) => {
 
@@ -11,11 +13,10 @@ export const fieldsValidator = (req, res, next) => {
     next()
 }
 
-
 export const userValidator = [
-    body('name', 'The name is invalid').not().isEmpty(),
-    body('email', 'The email is invalid').isEmail(),
+    body('name', 'The name is required').not().isEmpty(),
+    body('email', 'The email is invalid').isEmail().custom(validateEmailExist),
     body('password', 'The password is invalid').not().isEmpty().isLength({min: 6}),
-    body('role', 'The role is invalid').not().isEmpty().isIn(['ADMIN_ROLE', 'USER_ROLE']),
+    body('role').custom(isRoleValid),
     fieldsValidator
 ]
