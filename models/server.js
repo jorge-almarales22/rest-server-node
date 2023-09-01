@@ -2,8 +2,9 @@ import express from 'express'
 import 'dotenv/config'
 import cors from 'cors'
 
-import {usersRoutes} from '../routes/user.js'
+import {usersRoutes} from '../routes/route.user.js'
 import { dbConnection } from '../database/config.js'
+import { authRoutes } from '../routes/route.auth.js'
 
 export default class Server{
 
@@ -13,6 +14,7 @@ export default class Server{
         this.app = express()
         this.port = process.env.PORT
         this.usersPath = '/api/users'
+        this.authPath = '/api/auth'
 
         //Conectar DB
         this.connectDB()
@@ -43,6 +45,7 @@ export default class Server{
     routes(){
 
         this.app.use(this.usersPath, usersRoutes)
+        this.app.use(this.authPath, authRoutes)
 
     }
 

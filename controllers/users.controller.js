@@ -31,13 +31,23 @@ export const userPost = async(req, res = response) => {
     })
 }
 
-export const userPut = (req, res = response) => {
+export const userPut = async(req, res = response) => {
+    const {uid} = req
+    
+    const {id, password, google, email, ...rest} = req.body
 
-    const {id, text} = req.params
+    if(password){
+        //Encriptar la contrasena
+        const salt = bcryptjs.genSaltSync()
+        rest.password = bcryptjs.hashSync(password, salt)
+    }
+
+    const user = await User.findByIdAndUpdate(id, rest)
+
     res.json({
-        msg: "Response from controller PUT",
-        id,
-        text
+        msg: "User updated successfully",
+        user,
+        uid
     })
 }
 
